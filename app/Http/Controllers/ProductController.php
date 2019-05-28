@@ -23,11 +23,17 @@ class ProductController extends Controller
         $product = Product::find($id); //se busca el producto 
         $oldCart = Session::has('cart') ? Session::get('cart') : null;//Se verifica la sesión por si hay un carro en existencia
         $cart = new Cart($oldCart);//Se construye el carro de compras a partir de uno existente, de ser el caso
-        $cart->add($product, $product->id);//Se añade el nuevo producto
-
+        
+			
+		
+		$cart->add($product, $product->id);//Se añade el nuevo producto
         $request->session()->put('cart', $cart);//se almacenan los datos en la sesión
+		$product->stock --; // Se disminuye el contador cada vez que se agrega un producto al carro
+		$product->save();
         return redirect()->route('product.index');
-    }
+   
+	}
+	
     public function getCart()
     {
         if (!Session::has('cart')) {
@@ -79,4 +85,36 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Successfully purchased products!');
 
     }
+	public function getReduceByOne($id){
+		$oldCart = Session::has('cart') ? Session::get('cart') : null;
+		$cart = new Cart($oldCart);
+		$cart->reduceByOne($id);
+		if(count($cart->items)>0){
+			Session::put('cart',$cart);
+		}else{
+			Session::forget('cart');
+		}
+		$product = Product::find($id); //se busca el producto 
+	    $product->stock ++;
+		$product->save();
+	return redirect()->route('product.shoppingCart');
+}
+
+	public function getRemoveItem($id){
+		$oldCart = Session::has('cart') ? Session::get('cart') : null;
+		$cart = new Cart($oldCart);
+		
+		$product = Product::find($id); //se busca el producto 
+	    $product->stock += $cart->items[$id]['qty'];
+		$product->save();
+		
+		$cart->removeItem($id);     //Se remueve de la lista a menos que sea mayor a a 0
+		if(count($cart->items)>0){
+			Session::put('cart',$cart);
+		}else{
+			Session::forget('cart');
+		}
+
+		return redirect()->route('product.shoppingCart');
+}
 }

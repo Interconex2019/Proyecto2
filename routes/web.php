@@ -35,6 +35,16 @@ Route::post('/checkout', [
     'as' => 'checkout'
 ]);
 
+Route::get('/reduce/{id}',[
+	'uses' => 'ProductController@getReduceByOne', //Reducir en 1
+	'as' => 'product.reduceByOne'
+]);
+
+Route::get('/remove/{id}',[
+	'uses' => 'ProductController@getRemoveItem', //Eliminar prodcutos del carro
+	'as' => 'product.remove'
+]);
+
 Route::group(['prefix' => 'user'], function() {
     Route::group(['middleware' => 'guest'], function() {
         Route::get('/signup', [
