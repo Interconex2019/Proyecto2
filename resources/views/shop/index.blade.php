@@ -21,14 +21,28 @@
                     <div class="thumbnail">
                         <img src="{{ $product->imagePath }}" alt="..." class="img-responsive">
                         <div class="caption">
+						@if($product->stock == 0) 
+							<span class="badge badge-warning">Agotado</span>
+						@else
+						    <span class="badge badge-primary">Cantidad:{{ $product->stock }}</span>
+						@endif
+						
+						
                             <h3>{{ $product->title }}</h3>
                             <p class="description">
                             {{ $product->description }}
-                                </p>
+                            </p>
                             <div class="clearfix">
                                 <div class="pull-left price">${{ $product->price }}</div>
-                                <a href="{{ route('product.addToCart', ['id' => $product->id]) }}"
+						@if($product->stock != 0)
+							
+					
+				
+						        <a href="{{ route('product.addToCart', ['id' => $product->id]) }}"
                                    class="btn btn-success pull-right" role="button">Agregar</a>
+						@endif
+						
+           
                             </div>
                         </div>
                     </div>

@@ -17,8 +17,8 @@
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary btn-xs dropdown-toogle" data-toggle="dropdown">Acción <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Eliminar 1</a></li>
-                                        <li><a href="#">Eliminar todo</a></li>
+                                        <li><a href="{{ route('product.reduceByOne', ['id' => $product['item']['id']]) }}">Eliminar 1</a></li>
+                                        <li><a href="{{ route('product.remove', ['id' => $product['item']['id']]) }}">Eliminar todo</a></li>
                                     </ul>
                                 </div>
                             </li>
