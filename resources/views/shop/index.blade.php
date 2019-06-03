@@ -21,28 +21,24 @@
                     <div class="thumbnail">
                         <img src="{{ $product->imagePath }}" alt="..." class="img-responsive">
                         <div class="caption">
-						@if($product->stock == 0) 
-							<span class="badge badge-warning">Agotado</span>
+						@if($product->stock <= 0)
+							<span class="label label-default">Agotado</span>
+                        @else @if($product->stock <= 2)
+                            <span class="label label-warning">Cantidad:{{ $product->stock }}</span>
 						@else
-						    <span class="badge badge-primary">Cantidad:{{ $product->stock }}</span>
+						    <span class="label label-primary">Cantidad:{{ $product->stock }}</span>
 						@endif
-						
-						
+                        @endif
+
                             <h3>{{ $product->title }}</h3>
                             <p class="description">
                             {{ $product->description }}
                             </p>
                             <div class="clearfix">
                                 <div class="pull-left price">${{ $product->price }}</div>
-						@if($product->stock != 0)
-							
-					
-				
-						        <a href="{{ route('product.addToCart', ['id' => $product->id]) }}"
-                                   class="btn btn-success pull-right" role="button">Agregar</a>
-						@endif
-						
-           
+
+                                  <a href="{{ route('product.addToCart', ['id' => $product->id]) }}"
+                                   class="btn @if($product->stock <= 0) disabled btn-default @endif btn-success pull-right" role="button">Agregar</a>
                             </div>
                         </div>
                     </div>
